@@ -18,12 +18,12 @@ namespace NetworkLib{
     class noncopyable{
         protected:
             //默认的析构函数和构造函数是保护的
-            noncopyable(){}
-            ~noncopyable(){}
+            noncopyable() = default;
+            ~noncopyable() = default;
 
         private:
             //私有化复制构造函数和复制赋值操作符
-            noncopyable(const noncopyable&);
-            const noncopyable& operator=(const noncopyable &);
+            noncopyable(const noncopyable&) = delete;
+            const noncopyable& operator=(const noncopyable &) = delete;
     }
 };
