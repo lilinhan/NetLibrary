@@ -30,7 +30,7 @@ namespace NetworkLib{
             std::mutex TasksMutex_; //Mutex for task queue
             std::condition_variable Condition_;
 
-            void invoke(); //Threads invoke Functions
+            void Invoke(); //Threads invoke Functions
         public:
             ThreadPool(int ThreadsNum); //init the ThreadPool
             ~ThreadPool();
