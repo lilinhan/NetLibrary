@@ -73,9 +73,6 @@ namespace Socket
         };
 
     class BaseSocket{
-        private:
-            void socket(void);
-
         protected:
             SOCKETID _socket_id;
             int _socket_type;
@@ -83,7 +80,6 @@ namespace Socket
             bool _binded;
 
         public:
-            BaseSocket(void);
             BaseSocket(int);
             ~BaseSocket();
 
