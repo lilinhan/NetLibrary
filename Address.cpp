@@ -30,13 +30,13 @@ namespace Socket {
     }
 
     Address::Address(struct sockaddr_in address) {
-        address(inet_ntoa(address.sin_addr),address.sin_port);
+        this->address(inet_ntoa(address.sin_addr),address.sin_port);
     }
 
     Address::Address(const Address& address) {
         this->sin_family = address.sin_family;
         this->sin_addr = address.sin_addr;
-        this.sin_port = address.sin_port;
+        this->sin_port = address.sin_port;
     }
 
     IP Address::ip(void) {
@@ -49,7 +49,7 @@ namespace Socket {
             error << "[ip] with [ip = "<< ip <<"] invalid ip address provided";
             throw SocketException(error.str());
         }
-        return this->ip;
+        return this->ip();
     }
 
     PORT Address::port(void) {
@@ -57,8 +57,8 @@ namespace Socket {
     }
 
     PORT Address::port(PORT port) {
-        this->port = htos(port);
-        return this->port;
+        this->sin_port = htons(port);
+        return this->port();
     }
 
     std::ostream& operator<< (std::ostream& out, Address& address) {

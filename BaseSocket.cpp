@@ -21,7 +21,7 @@ namespace Socket{
     BaseSocket::~BaseSocket() {}
 
     void BaseSocket::open(void) {
-        if(!this->_open) {
+        if(!this->_opened) {
             if((this->_socket_id = socket(AF_INET, this->_socket_type, 0)) == -1)
                 throw SocketException("[open] Cannot create socket");
             this->_opened = true;
@@ -31,7 +31,7 @@ namespace Socket{
 
     void BaseSocket::close(void) {
         if(this->_opened) {
-            shutdown(this->_socket_id, SHTU_RDWR);
+            shutdown(this->_socket_id, SHUT_RDWR);
         }
         this->_opened = false;
         this->_binded = false;
