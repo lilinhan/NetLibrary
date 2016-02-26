@@ -81,6 +81,7 @@ namespace Socket
 
         public:
             BaseSocket(int);
+            BaseSocket(void);
             ~BaseSocket();
 
             void open(void);
@@ -101,7 +102,7 @@ namespace Socket
             template<class T> int send(IP, PORT, std::vector<T>);
             template<class T> int send(Address, std::vector<T>);
 
-            template<class T> int receive(Address*, T*, size_t, unsigned int);
+            template<class T> int receive(Address*, T*, size_t, unsigned int*);
             template<class T> DataGram<T*> receive(T*, size_t);
             template<class T, size_t N> DataGram<T[N]> receive(size_t);
             template<class T> DataGram<T> receive(void);

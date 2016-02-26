@@ -11,6 +11,8 @@
 #include"Socket.h"
 
 namespace Socket{
+    BaseSocket::BaseSocket(void) {}
+
     BaseSocket::BaseSocket(int socket_type) {
         this->_socket_type = socket_type;
         this->_opened = false;
