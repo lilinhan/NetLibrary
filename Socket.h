@@ -118,18 +118,18 @@ namespace Socket
             TCP(const TCP&);
 
             IP ip(void);
-            IP PORT(void);
+            PORT port(void);
             Address address(void);
 
-            void listen_on_port(Socket::PORT);
+            void listen_on_port(PORT, unsigned int);
             void connect_to(Address);
 
             TCP accept_client(void);
             template<class T> int send(const T*, size_t);
             template<class T> int receive(T*, size_t);
 
-            void send_file();
-            void receive_file();
+            void send_file(std::string);
+            void receive_file(std::string);
     };
 }
 
