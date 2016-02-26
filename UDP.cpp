@@ -13,7 +13,7 @@
 namespace Socket {
     UDP::UDP(void):BaseSocket(SOCK_DGRAM) {}
 
-    UDP::UDP(const UDP& udp) : BaseSocket() {
+    UDP::UDP(const UDP &udp):BaseSocket() {
         this->_socket_id = udp._socket_id;
         this->_opened = udp._opened;
         this->_binded = udp._binded;
@@ -78,7 +78,7 @@ namespace Socket {
     }
 
     template<class T>
-    int UDP::receive(Address *address, T *data, size_t len, unsigned int *receive_elements) {
+    int UDP::receive(Socket::Address *address, T *data, size_t len, unsigned int *receive_elements) {
         if(!this->_opened) this->open();
         if(!this->_binded) throw SocketException("[receive]Make the socket listening before recriving");
 
@@ -102,16 +102,18 @@ namespace Socket {
     }
 
     template<class T>
-    DataGram<T*> UDP::receive(T *buffer, size_t len = SOCKET_MAX_BUFFER_LEN) {
+    DataGram<T*> UDP::receive(T *_buffer, size_t len) {
+        len = SOCKET_MAX_BUFFER_LEN;
         DataGram<T*> ret;
-        ret._receive_bytes = this->receive<T>(&ret._address, buffer, len, &ret._receive_elements);
+        ret._receive_bytes = this->receive<T>(&ret._address, _buffer, len, &ret._receive_elements);
 
         ret.data = _buffer;
         return ret;
     }
 
     template<class T, size_t N>
-    DataGram<T[N]> UDP::receive(size_t len = N) {
+    DataGram<T[N]> UDP::receive(size_t len) {
+        len = N;
         DataGram<T[N]> ret;
         ret._receive_bytes = this->receive<T>(&ret._address, ret._data, len, &ret._receive_elements);
         return ret;
@@ -147,5 +149,6 @@ namespace Socket {
         return ret;
     }
 }
+
 
 #endif
