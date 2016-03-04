@@ -1,19 +1,19 @@
 /*************************************************************************
-    > File Name: Timestap.cpp
+    > File Name: Timestamp.cpp
     > Author: lewin
     > Mail: lilinhan1303@gmail.com
     > Organization: Xiyou Linux Group
     > Created Time: 2016年03月04日 星期五 20时53分10秒
  ************************************************************************/
-#include"Timestap.h"
+#include"Timestamp.h"
 
 namespace NetworkLib{
-    void Timestap::updatetime()  {
+    void Timestamp::updatetime()  {
         _temp = time(&_temp);
         _time_struct = gmtime(&_temp);
     }
 
-    void Timestap::timetostring()  {
+    void Timestamp::timetostring()  {
         updatetime();
         char buf[20];
         snprintf(buf, 20, "%d年%d月%d日 ",_time_struct->tm_year+1900, _time_struct->tm_mon+1, _time_struct->tm_mday);
@@ -29,16 +29,17 @@ namespace NetworkLib{
         }
     }
 
-    std::string Timestap::now() {
+    std::string Timestamp::now() {
         timetostring();
         return _year_time + _hour_time;
     }
 }
 
+/*
 int main(int argc, char *argv[])
 {
-    NetworkLib::Timestap t;
+    NetworkLib::Timestamp t;
     std::cout << t.now() << std::endl;
     return EXIT_SUCCESS;
 }
-
+*/

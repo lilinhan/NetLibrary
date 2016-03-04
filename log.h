@@ -68,7 +68,7 @@ namespace MyTinyLog{
             ~LOG();
 
             void writeLog();   //写入  主要让线程去跑  做到异步写
-            void  setParam(Level level, std::string text, std::string FileName, int line);
+            void setParam(Level level, std::string text, std::string FileName, int line);
             void appendLogTail();  //添加日志到Log文件尾
             void stopLog();
             void print();   //测试所有的域

@@ -6,6 +6,7 @@
   > Created Time: 2016年01月22日 星期五 14时36分58秒
  ************************************************************************/
 #include"log.h"
+#include"Timestamp.cpp"
 using namespace MyTinyLog;
 
 LOG::LOG(std::string AuthorName) {
@@ -47,9 +48,10 @@ void LOG::setLineNum (int line)  {
 }
 
 void LOG::setCurrentTime() {
-    std::time_t t = std::time(0);
-    std::string temp(std::asctime(std::localtime(&t)));
-    CurrentTime = temp;
+    //std::time_t t = std::time(0);
+    //std::string temp(std::asctime(std::localtime(&t)));
+    NetworkLib::Timestamp t;
+    CurrentTime = t.now();
 }
 
 void LOG::setLevel(Level le) {
@@ -117,17 +119,16 @@ void LOG::writeLog() {
 
 void LOG::appendLogTail() {
     spliceString();
-/*
     std::lock_guard<std::mutex> lock(mutex);
     std::thread thread(std::bind(&LOG::writeLog,this));
     thread.join();
-    */
 }
 
-/*int main() {
-  LOG log("lewin");
-  log.setParam(OFF, "file error", __FILE__, __LINE__);
+
+int main() {
+    LOG log("lewin");
+    log.setParam(OFF, "file error", __FILE__, __LINE__);
 //   log.print();
-log.appendLogTail();
+    for(int i = 0; i < 10000; i++)
+    log.appendLogTail();
 }
-*/

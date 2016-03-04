@@ -17,7 +17,7 @@
 #pragma once
 
 namespace NetworkLib{
-    class Timestap :private noncopyable
+    class Timestamp :private noncopyable
     {
         private:
             struct tm *_time_struct;
@@ -28,8 +28,8 @@ namespace NetworkLib{
             void timetostring();
             void updatetime();
         public:
-            Timestap(){};
-            ~Timestap(){};
+            Timestamp(){};
+            ~Timestamp(){};
             std::string now();  // get time
     };
 }
