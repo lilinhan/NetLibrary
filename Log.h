@@ -24,9 +24,11 @@
 #include<pthread.h>
 #include<sstream>
 #include<tuple>
+#include<chrono>
+#include<fstream>
+#include<vector>
 
 #include"Timestamp.cpp"
-#include"Mutex.h"
 
 enum Level{
     OFF,    //The highest level, close log
@@ -42,25 +44,28 @@ namespace NetworkLib{
     class Log{
         private:
             Timestamp _time;  //get time stamp
-            std::thread _back_thread;   //backthread  write buffer to hard disk
-            std::condition_variable _buffer_empty;   //judge the buffer empty
             std::condition_variable _buffer_full;   //judge the buffer full
-
-            std::string _buffer;   //main thread write in buffer, Log's thread write to hard disk
+            std::mutex _mutex;  //lock the _buffer
+ //            std::string _buffer;   //main thread write in buffer, Log's thread write to hard disk
             std::string PATH;  //Log file name  you want. in ./config/log.config
-
             std::string end = "  "; // for format buffer
+            bool _start;    //Log system start
+
+            std::shared_ptr<std::thread> ptr;  //thread point
 
             void write_hard_disk();  //Log's thread use
-
             template<typename T>
             std::string to_string(const T &t);  //format all type to string
-
             std::string level_to_string(Level _level);  //Level exchange to string
 
+            std::vector<std::string> _all_logs;  //all logs
         public:
             Log();  //default
             ~Log();
+
+            void start_log(); //start log system for user
+
+            void stop_log();  //stop log system for user
 
             const Log& operator<< (std::tuple<Level, std::string, std::string, int>);  //easy to build log
     };

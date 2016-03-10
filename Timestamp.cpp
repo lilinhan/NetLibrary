@@ -33,6 +33,12 @@ namespace NetworkLib{
         timetostring();
         return _year_time + _hour_time;
     }
+
+    void Timestamp::clear() {
+        _year_time.clear();
+        _hour_time.clear();
+    }
+
 }
 
 /*

@@ -12,7 +12,8 @@
 
 namespace NetworkLib{
     Log::Log() {
-        std::ifstream _fin("./config/log.config");   //open config file
+        _start = true; //start signal
+        std::ifstream _fin("./config/log.conf");   //open config file
         std::string _config_file_contex;        //get config context
         _fin >> _config_file_contex;        //config context to string
         _config_file_contex = _config_file_contex.substr(_config_file_contex.find('=') + 1);  //get context behind operator =
@@ -51,28 +52,48 @@ namespace NetworkLib{
         return NULL;
     }
 
-    void Log::write_hard_disk() {
+    void Log::start_log() { //start log
+        ptr = std::make_shared<std::thread> (&NetworkLib::Log::write_hard_disk, this);
+    }
 
+    void Log::stop_log() { // stop log
+        _start = false;
+        ptr->join();
+    }
+
+    void Log::write_hard_disk() {
+        std::fstream f(PATH);  //open file fd
+        while(_start) {
+            std::unique_lock<std::mutex> locker(_mutex);
+            _buffer_full.wait_for(locker, std::chrono::seconds(3));
+            if(_all_logs.size() != 0)  {
+                //write in file
+                for(auto it = _all_logs.begin(); it != _all_logs.end(); it++) {
+                    f << *it;
+                }
+                _all_logs.clear();
+                f.close();
+            }
+        }
     }
 
     const Log& Log::operator<< (std::tuple<Level, std::string, std::string, int> _tu_data){
-
+        std::unique_lock<std::mutex> locker(_mutex);
+        std::string _buffer;
         _buffer = _time.now() + end;    //add time stamp to buffer
-
         pthread_t _id = pthread_self();  //get main thread id
         _buffer = _buffer + to_string(_id) + end;  //add mian thread id to buffer
-
         _buffer = _buffer + level_to_string(std::get<0>(_tu_data)) + end;  //add level to buffer
-
         _buffer = _buffer + std::get<1>(_tu_data) + end; //add log context
-
         _buffer = _buffer + std::get<2>(_tu_data) + end; //add source file name
-
         _buffer = _buffer + to_string(std::get<3>(_tu_data)); //add line
-
         _buffer = _buffer + "\n";
-
-        std::cout << _buffer;
+        _all_logs.push_back(_buffer);
+        _buffer.clear();
+        _time.clear();
+        if(_all_logs.size() >= 10000000)  {
+            _buffer_full.notify_one();
+        }
         return *this;
     }
 }

@@ -31,6 +31,7 @@ namespace NetworkLib{
             Timestamp(){};
             ~Timestamp(){};
             std::string now();  // get time
+            void clear();
     };
 }
 
