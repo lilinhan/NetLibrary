@@ -52,7 +52,6 @@ void ThreadPool::Invoke() {
     }
     fun();
 }
-
 }
 
 

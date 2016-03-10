@@ -10,35 +10,34 @@
 
 #include<iostream>
 #include<pthread.h>
-#include"noncopyable.h"
 
 namespace NetworkLib{
-    class MutexLock:noncopyable {
+    class MutexLock{
         private:
             pthread_mutex_t _mutex;
         public:
             MutexLock() {
-                if(pthread_mutex_init(&_mutex, NULL) != 0) {
+                if(pthread_mutex_init(&_mutex, NULL) != 0) { //init mutex
                     throw std::exception();
                 }
             }
-            ~MutexLock() {
+            ~MutexLock() {  //destruct mutex
                 pthread_mutex_destroy(&_mutex);
             }
 
-            bool lock() {
+            bool lock() { //lock
                 return pthread_mutex_lock(&_mutex) == 0;
             }
-            bool unlock() {
+            bool unlock() {  //unlock
                 return pthread_mutex_unlock(&_mutex) == 0;
             }
 
-            pthread_mutex_t *getmutex() {
+            pthread_mutex_t *getmutex() {  //get mutex
                 return &_mutex;
             }
     };
 
-    class MutexLockGuarnd:noncopyable {
+    class MutexLockGuarnd{
         private:
             MutexLock &_mutex;
 
