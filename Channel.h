@@ -12,6 +12,7 @@
 #include<function>
 #include<string>
 #include<mutex>
+#include<sys/epoll.h>
 
 #include"Timestamp.h"
 #include"Mutex.h"

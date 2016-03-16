@@ -18,16 +18,16 @@ void Channel::handleEvent(Timestamp reciveTime)  {
 }
 
 void Channel::handleEventWithGuard(Timestamp reciveTime) {
-    if((revents_ & POLLHUP) && !(revents_ & POLLIN))  {
+    if((revents_ & EPOLLHUP) && !(revents_ & EPOLLIN))  {
         if(closeCallBack_)  closeCallBack_();
     }
-    if(revents_ & (POLLERR | POLLNVAL)) {
+    if(revents_ & (EPOLLERR | EPOLLNVAL)) {
         if(errorCallBack_)  errorCallBack_();
     }
-    if(revents_ & (POLLIN | POLLPRI | POLLHUP)) {
+    if(revents_ & (EPOLLIN | EPOLLPRI | EPOLLHUP)) {
         if(readCallBack_)  readCallBack_();
     }
-    if(revents_ & POLLOUT)  {
+    if(revents_ & EPOLLOUT)  {
         if(writeCallBack_)  writeCallBack_();
     }
 }
