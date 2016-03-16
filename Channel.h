@@ -49,6 +49,9 @@ namespace NetworkLib {
             //mutex
             MutexLock lock_;
 
+            //file description
+            int fd_;
+
             //function for handle
             ReadEventCallBack readCallBack_;
             EventCallBack writeCallBack_;
