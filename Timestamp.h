@@ -30,8 +30,11 @@ namespace NetworkLib{
         public:
             Timestamp(){};
             ~Timestamp(){};
+            Timestamp(Timestap time){};
             std::string now();  // get time
             void clear();
+
+            const Timestap& operator= (Timestap time);
     };
 }
 

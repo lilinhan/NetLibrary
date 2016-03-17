@@ -20,18 +20,29 @@
 #include<stdlib.h>
 #include<unistd.h>
 
-#include"noncopyable.h"
+#include"Timestamp.h"
 
 namespace NetworkLib {
-    class Timer:noncopyable {
-        private:
-            unsigned int time;
+    class Timestamp;
 
+    typedef std::function<void()> TimerCallBack;
+
+    class Timer: {
         public:
-            Timer() {}
+            Timer(const TimerCallBack &cb, Timestamp when, double interval);
             ~Timer() {}
 
-            void set_task(void (*p)(int), unsigned int t); //add time task
+            void run() const;
+            Timestamp getExpiration() const;
+            bool ifRepeat() const;
+            void restart(Timestamp now);
+
+        private:
+            const TimerCallBack CallBack_;
+            //time left
+            Timestamp expiraton_;
+            const double interval_;
+            const bool repeat_;
     };
 }
 

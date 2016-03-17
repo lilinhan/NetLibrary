@@ -8,6 +8,22 @@
 #include"Timestamp.h"
 
 namespace NetworkLib{
+    Timestamp::Timestamp(Timestamp time):
+        _time_struct(time._time_struct),
+        _temp(time._temp),
+        _year_time(time._year_time),
+        _hour_time(time._hour_time)
+    {}
+
+    const Timestamp& Timestamp::operator= (Timestamp time) {
+        _time_struct = time._time_struct;
+        _temp = time._temp;
+        _year_time = time._year_time;
+        _hour_time = time._hour_time;
+
+        return this;
+    }
+
     void Timestamp::updatetime()  {
         _temp = time(&_temp);
         _time_struct = gmtime(&_temp);
