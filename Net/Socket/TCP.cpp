@@ -1,45 +1,46 @@
 /*************************************************************************
-    > File Name: TCP.cpp
-    > Author: lewin
-    > Mail: lilinhan1303@gmail.com
-    > Organization: Xiyou Linux Group
-    > Created Time: 2016年02月26日 星期五 16时08分03秒
+  > File Name: TCP.cpp
+  > Author: lewin
+  > Mail: lilinhan1303@gmail.com
+  > Organization: Xiyou Linux Group
+  > Created Time: 2016年02月26日 星期五 16时08分03秒
  ************************************************************************/
 #ifndef _TCP_CPP_
 #define _TCP_CPP_
 
 #include"Socket.h"
 
-namespace Socket{
-    TCP::TCP(void):BaseSocket(SOCK_STREAM) {}
+namespace NetworkLib{
+    namespace Socket{
+        TCP::TCP(void):BaseSocket(SOCK_STREAM) {}
 
-    TCP::TCP(const TCP &tcp):BaseSocket() {
-        this->_socket_id = tcp._socket_id;
-        this->_opened = tcp._opened;
-        this->_binded = tcp._binded;
-    }
-
-    IP TCP::ip(void) {
-        return this->_address.ip();
-    }
-
-    PORT TCP::port(void) {
-        return this->_address.port();
-    }
-
-    Address TCP::address(void) {
-        return Address(this->_address);
-    }
-
-    void TCP::listen_on_port(PORT port, unsigned int listener = 1) {
-        BaseSocket::listen_on_port(port);
-
-        if(listen(this->_socket_id, listener) != 0)  {
-            std::stringstream error;
-            error<< "[listen_on_port] with [port = "<< port << "][listener = "<< listener << "]Cannot bind Socket";
-            throw SocketException(error.str());
+        TCP::TCP(const TCP &tcp):BaseSocket() {
+            this->_socket_id = tcp._socket_id;
+            this->_opened = tcp._opened;
+            this->_binded = tcp._binded;
         }
-    }
+
+        IP TCP::ip(void) {
+            return this->_address.ip();
+        }
+
+        PORT TCP::port(void) {
+            return this->_address.port();
+        }
+
+        Address TCP::address(void) {
+            return Address(this->_address);
+        }
+
+        void TCP::listen_on_port(PORT port, unsigned int listener = 1) {
+            BaseSocket::listen_on_port(port);
+
+            if(listen(this->_socket_id, listener) != 0)  {
+                std::stringstream error;
+                error<< "[listen_on_port] with [port = "<< port << "][listener = "<< listener << "]Cannot bind Socket";
+                throw SocketException(error.str());
+            }
+        }
 
         void TCP::connect_to(Address address) {
             if(this->_binded) throw SocketException("[connect_to]Socket already binded to a port, use another socket");
@@ -64,42 +65,42 @@ namespace Socket{
         }
 
         template<class T>
-        int TCP::send(const T* buffer, size_t len) {
-            if(!this->_binded) throw SocketException("[send]Socket not binded");
-            if(!this->_opened) throw SocketException("[send]Socket not opened");
+            int TCP::send(const T* buffer, size_t len) {
+                if(!this->_binded) throw SocketException("[send]Socket not binded");
+                if(!this->_opened) throw SocketException("[send]Socket not opened");
 
-            len *= sizeof(T);
-            if(len > (SOCKET_MAX_BUFFER_LEN * sizeof(T))) {
-                std::stringstream error;
-                error<<"[send][len = "<< len << "]Data length higher than max buffer len("<<SOCKET_MAX_BUFFER_LEN <<")";
-                throw SocketException(error.str());
-            }
+                len *= sizeof(T);
+                if(len > (SOCKET_MAX_BUFFER_LEN * sizeof(T))) {
+                    std::stringstream error;
+                    error<<"[send][len = "<< len << "]Data length higher than max buffer len("<<SOCKET_MAX_BUFFER_LEN <<")";
+                    throw SocketException(error.str());
+                }
 
-            int ret;
-            if((ret = ::send(this->_socket_id, (const char *)buffer, len, 0)) == -1) {
-                throw SocketException("[send]Cannot send");
+                int ret;
+                if((ret = ::send(this->_socket_id, (const char *)buffer, len, 0)) == -1) {
+                    throw SocketException("[send]Cannot send");
+                }
+                return ret;
             }
-            return ret;
-        }
 
         template<class T>
-        int TCP::receive(T *buffer, size_t len) {
-            if(!this->_binded) throw SocketException("[send_file]Socket not binded");
-            if(!this->_opened) throw SocketException("[send_file]Socket not opened");
+            int TCP::receive(T *buffer, size_t len) {
+                if(!this->_binded) throw SocketException("[send_file]Socket not binded");
+                if(!this->_opened) throw SocketException("[send_file]Socket not opened");
 
-            len *= sizeof(T);
-            if(len > (SOCKET_MAX_BUFFER_LEN * sizeof(T))) {
-                std::stringstream error;
-                error << "[receive][len = "<< len << "]Data length higher than max buffer len("<< SOCKET_MAX_BUFFER_LEN <<")";
-                throw SocketException(error.str());
-            }
+                len *= sizeof(T);
+                if(len > (SOCKET_MAX_BUFFER_LEN * sizeof(T))) {
+                    std::stringstream error;
+                    error << "[receive][len = "<< len << "]Data length higher than max buffer len("<< SOCKET_MAX_BUFFER_LEN <<")";
+                    throw SocketException(error.str());
+                }
 
-            int ret;
-            if((ret = recv(this->_socket_id, buffer, len ,0)) == -1) {
-                throw SocketException("[send]Cannot receive");
+                int ret;
+                if((ret = recv(this->_socket_id, buffer, len ,0)) == -1) {
+                    throw SocketException("[send]Cannot receive");
+                }
+                return ret;
             }
-            return ret;
-        }
 
         void TCP::send_file(std::string file_name) {
             unsigned long long file_size;
@@ -161,6 +162,6 @@ namespace Socket{
 
             fp.close();
         }
+    }
 }
-
 #endif
