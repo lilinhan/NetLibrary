@@ -62,6 +62,8 @@ namespace NetworkLib{
             ret._socket_id = accept(this->_socket_id, (struct sockaddr*)&ret._address, &len);
             ret._opened = true;
             ret._binded = true;
+
+            return ret;
         }
 
         template<class T>

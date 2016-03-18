@@ -133,4 +133,12 @@ namespace NetworkLib{
         };
     }
 }
+
+#include"SocketException.cpp"
+#include"BaseSocket.cpp"
+#include"DataGram.cpp"
+#include"Address.cpp"
+#include"UDP.cpp"
+#include"TCP.cpp"
+
 #endif
